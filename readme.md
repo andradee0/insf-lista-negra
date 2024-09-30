@@ -29,19 +29,7 @@ PORTA=5010
 
 MYSQL_HOST='localhost'
 MYSQL_USER='root'
-MYSQL_PORT=4406
+MYSQL_PORT=3306
 MYSQL_PWD='rootpassword'
 MYSQL_DB='insfdb'
 ```
-
-## Passo a Passo
-
-### BACKEND
-- Incluir rota para obter por Id na API
-
-### FRONTEND
-- Definir uma rota que receba por parametros o Id (index.js / routes.js)
-- Receber na tela de cadastrar via useParams o novo parametro
-- Buscar os dados para o formulário com o useEffect
-- Atualizar o método de salvar para criar ou atualizar caso tenha Id
-- Na tela de consulta, adicionar um atalho para alterar
