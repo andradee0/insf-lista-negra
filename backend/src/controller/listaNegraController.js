@@ -17,6 +17,19 @@ endpoints.get('/listaNegra/', async (req, resp) => {
     }
 })
 
+endpoints.get('/listaNegra/:id', async (req, resp) => {
+    try {
+        let id = req.params.id;
+        let registros = await db.consultarListaNegraPorId(id);
+        resp.send(registros[0]);
+    }
+    catch (err) {
+        resp.status(400).send({
+            erro: err.message
+        })
+    }
+})
+
 
 endpoints.post('/listaNegra/', async (req, resp) => {
     try {

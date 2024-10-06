@@ -31,6 +31,23 @@ export async function consultarListaNegra() {
     return registros;
 }
 
+export async function consultarListaNegraPorId(id) {
+    const comando = `
+        select id_lista_negra   id,
+               nm_pessoa        nome,
+               ds_motivo        motivo,
+               dt_vinganca      vinganca,
+               nr_nota_odio     notaOdio,
+               bt_perdoado      perdoado 
+          from tb_lista_negra
+          where id_lista_negra = ?
+    `;
+
+    let resposta = await con.query(comando, [id]);
+    let registros = resposta[0];
+
+    return registros;
+}
 
 export async function alterarListaNegra(id, pessoa) {
     const comando = `
