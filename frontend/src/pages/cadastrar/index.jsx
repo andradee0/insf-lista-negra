@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import moment from 'moment';
 import './index.scss'
 
 import axios from 'axios'
+import { Link, useParams } from 'react-router-dom';
 
 
 
@@ -12,6 +14,7 @@ export default function Cadastrar() {
     const [nota, setNota] = useState('');
     const [perdoado, setPerdoado] = useState(false);
 
+    const { id } = useParams();
 
     async function salvar() {
         let paramCorpo = {
@@ -22,16 +25,45 @@ export default function Cadastrar() {
             "perdoado": perdoado
         }
 
-        const url = 'http://localhost:5010/listaNegra';
-        let resp = await axios.post(url, paramCorpo);
-
-        alert('Pessoa adicionada na lista negra. Id: ' + resp.data.novoId);
+        
+        if (id == undefined) {
+            // CRIAR
+            const url = `http://localhost:5010/listaNegra/`;
+            let resp = await axios.post(url, paramCorpo);
+            alert('Pessoa adicionada na lista negra. Id: ' + resp.data.novoId);
+        } else {
+            // ALTERAR
+            const url = `http://localhost:5010/listaNegra/${id}`;
+            let resp = await axios.put(url, paramCorpo);
+            alert('Pessoa alterada na lista negra.');
+        }
     }
 
+    async function consultar() {
+        if (id != undefined) {
+            const url = `http://localhost:5010/listaNegra/${id}`;
+            let resp = await axios.get(url);
+            let dados = resp.data;
+
+            let data = moment(dados.vinganca).format('YYYY-MM-DD')
+            console.log(data)
+
+            setNome(dados.nome)
+            setMotivo(dados.motivo)
+            setVinganca(data)
+            setNota(dados.notaOdio)
+            setPerdoado(dados.perdoado)
+        }
+    }
+
+    useEffect(() => {
+        consultar();
+    }, [])
 
     return (
         <div className='pagina-cadastrar'>
-            <h1> CADASTRAR </h1>
+            <button><Link to={'/consultar'}>Voltar</Link></button>
+            <h1>{id ? 'EDITAR' : 'CADASTRAR'}</h1>
 
 
             <div className='form'>
@@ -41,7 +73,7 @@ export default function Cadastrar() {
                 </div>
                 <div>
                     <label>Motivo:</label>
-                    <input type='text' value={motivo} onChange={e => setMotivo(e.target.value)}/>
+                    <input type='text' value={motivo} onChange={e => setMotivo(e.target.value)} />
                 </div>
                 <div>
                     <label>Vingança:</label>

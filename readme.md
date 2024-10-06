@@ -8,6 +8,7 @@ Nosso **foco** é aprimorarmos nossas habilidades na implementação de um CRUD 
 
 ## Estrutura de Tabelas
 ```sql
+DROP DATABASE IF EXISTS insfdb;
 CREATE DATABASE insfdb;
 
 USE insfdb;
@@ -19,6 +20,12 @@ CREATE TABLE tb_lista_negra (
     dt_vinganca DATE NOT NULL,
     nr_nota_odio INT NOT NULL,
     bt_perdoado BOOLEAN NOT NULL
+);
+
+CREATE TABLE tb_usuario (
+	id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nm_usuario VARCHAR(255) NOT NULL,
+    ds_senha VARCHAR(64) NOT NULL
 );
 ```
 

@@ -16,8 +16,8 @@ root.render(
       <Routes>
         <Route path='/' element={<Home />}  />
         <Route path='/cadastrar' element={<Cadastrar />} />
+        <Route path='/cadastrar/:id' element={<Cadastrar />} />
         <Route path='/consultar' element={<Consultar />} />
-        
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

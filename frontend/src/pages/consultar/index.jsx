@@ -1,10 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './index.scss'
 
 import axios from 'axios'
 import { Link } from 'react-router-dom';
-
-
 
 export default function Consultar() {
     const [listaNegra, setListaNegra] = useState([]);
@@ -16,15 +14,24 @@ export default function Consultar() {
         setListaNegra(resp.data);
     }
 
+    async function excluir(id) {
+        const url = `http://localhost:5010/listaNegra/${id}`;
+        await axios.delete(url)
+
+        await buscar()
+    }
     
+    useEffect(() => {
+        buscar();
+    }, [])
 
     return (
         <div className='pagina-consultar'>
             <h1> CONSULTAR </h1>
 
             <button onClick={buscar}>Buscar</button>
+            <button><Link to={'/cadastrar'}>Cadastrar</Link></button>
 
-            
             <table>
                 <thead>
                     <tr>
@@ -34,6 +41,7 @@ export default function Consultar() {
                         <th>Vingança</th>
                         <th>Nota de Ódio</th>
                         <th>Perdoado?</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
 
@@ -46,6 +54,10 @@ export default function Consultar() {
                             <td>{new Date(item.vinganca).toLocaleDateString()}</td>
                             <td>{item.notaOdio}</td>
                             <td>{item.perdoado ? 'Sim' : 'Não'}</td>
+                            <td>
+                                <Link to={`/cadastrar/${item.id}`}>Alterar</Link>
+                                <Link onClick={() => excluir(item.id)}>Deletar</Link>
+                            </td>
                         </tr>
                     )}
                 </tbody>
