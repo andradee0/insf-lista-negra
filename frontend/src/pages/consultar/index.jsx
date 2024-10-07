@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react'
 import './index.scss'
 
 import axios from 'axios'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Consultar() {
     const [listaNegra, setListaNegra] = useState([]);
 
+    const navigate = useNavigate()
 
     async function buscar() {
-        const url = 'http://localhost:5010/listaNegra/';
+        const url = `http://localhost:5010/listaNegra`;
         let resp = await axios.get(url);
         setListaNegra(resp.data);
     }
@@ -20,13 +21,19 @@ export default function Consultar() {
 
         await buscar()
     }
+
+    async function sair() {
+        
+    }
     
     useEffect(() => {
-        buscar();
+        
     }, [])
 
     return (
         <div className='pagina-consultar'>
+            <h2>Bem-vindo</h2>
+            <button onClick={sair}>Sair</button>
             <h1> CONSULTAR </h1>
 
             <button onClick={buscar}>Buscar</button>

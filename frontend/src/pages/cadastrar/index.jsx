@@ -3,7 +3,7 @@ import moment from 'moment';
 import './index.scss'
 
 import axios from 'axios'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 
 
@@ -13,6 +13,8 @@ export default function Cadastrar() {
     const [vinganca, setVinganca] = useState('');
     const [nota, setNota] = useState('');
     const [perdoado, setPerdoado] = useState(false);
+
+    const navigate = useNavigate()
 
     const { id } = useParams();
 
@@ -24,7 +26,6 @@ export default function Cadastrar() {
             "notaOdio": nota,
             "perdoado": perdoado
         }
-
         
         if (id == undefined) {
             // CRIAR

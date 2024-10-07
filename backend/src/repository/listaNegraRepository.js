@@ -7,14 +7,14 @@ export async function inserirListaNegra(pessoa) {
 					        values (?, ?, ?, ?, ?)
     `;
     
-    let resposta = await con.query(comando, [pessoa.nome, pessoa.motivo, pessoa.vinganca, pessoa.notaOdio, pessoa.perdoado])
+    let resposta = await con.query(comando, [pessoa.nome, pessoa.motivo, pessoa.vinganca, pessoa.notaOdio, pessoa.perdoado, pessoa.idUsuario])
     let info = resposta[0];
     
     return info.insertId;
 }
 
 
-export async function consultarListaNegra() {
+export async function consultarListaNegra(idUsuario) {
     const comando = `
         select id_lista_negra   id,
                nm_pessoa        nome,
@@ -25,7 +25,7 @@ export async function consultarListaNegra() {
           from tb_lista_negra
     `;
 
-    let resposta = await con.query(comando);
+    let resposta = await con.query(comando, [idUsuario]);
     let registros = resposta[0];
 
     return registros;
