@@ -8,6 +8,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 
 
 export default function Cadastrar() {
+    const [usuario, setUsuario] = useState(null);
+
     const [nome, setNome] = useState('');
     const [motivo, setMotivo] = useState('');
     const [vinganca, setVinganca] = useState('');
@@ -24,7 +26,8 @@ export default function Cadastrar() {
             "motivo": motivo,
             "vinganca": vinganca,
             "notaOdio": nota,
-            "perdoado": perdoado
+            "perdoado": perdoado,
+            "idUsuario": usuario.id
         }
         
         if (id == undefined) {
@@ -58,6 +61,13 @@ export default function Cadastrar() {
     }
 
     useEffect(() => {
+        let usu = JSON.parse(localStorage.getItem('USUARIO'))
+        setUsuario(usu)
+
+        if (usu.id == undefined) {
+            navigate('/')
+        }
+
         consultar();
     }, [])
 

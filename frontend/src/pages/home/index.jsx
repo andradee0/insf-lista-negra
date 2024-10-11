@@ -10,7 +10,20 @@ export default function Home() {
     const navigate = useNavigate()
 
     async function entrar() {
-        
+        const usuario = {
+            "nome": nome,
+            "senha": senha
+        }
+
+        const url = `http://localhost:5010/entrar/`
+        let resp = await axios.post(url, usuario)
+
+        if (resp.data.erro != undefined) {
+            alert(resp.data.erro)
+        } else {
+            localStorage.setItem('USUARIO', JSON.stringify(resp.data))
+            navigate('/consultar')
+        }
     }
 
     return (

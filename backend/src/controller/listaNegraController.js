@@ -7,7 +7,8 @@ const endpoints = Router();
 
 endpoints.get('/listaNegra', async (req, resp) => {
     try {
-        let registros = await db.consultarListaNegra();
+        let idUsuario = req.query.idUsuario;
+        let registros = await db.consultarListaNegra(idUsuario);
         resp.send(registros);
     }
     catch (err) {

@@ -3,8 +3,8 @@ import con from "./connection.js";
 
 export async function inserirListaNegra(pessoa) {
     const comando = `
-        insert into tb_lista_negra (nm_pessoa, ds_motivo, dt_vinganca, nr_nota_odio, bt_perdoado) 
-					        values (?, ?, ?, ?, ?)
+        insert into tb_lista_negra (nm_pessoa, ds_motivo, dt_vinganca, nr_nota_odio, bt_perdoado, id_usuario) 
+					        values (?, ?, ?, ?, ?, ?)
     `;
     
     let resposta = await con.query(comando, [pessoa.nome, pessoa.motivo, pessoa.vinganca, pessoa.notaOdio, pessoa.perdoado, pessoa.idUsuario])
@@ -23,6 +23,7 @@ export async function consultarListaNegra(idUsuario) {
                nr_nota_odio     notaOdio,
                bt_perdoado      perdoado 
           from tb_lista_negra
+          where id_usuario = ?
     `;
 
     let resposta = await con.query(comando, [idUsuario]);

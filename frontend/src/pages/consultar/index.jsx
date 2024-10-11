@@ -5,12 +5,13 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Consultar() {
+    const [usuario, setUsuario] = useState(null);
     const [listaNegra, setListaNegra] = useState([]);
 
     const navigate = useNavigate()
 
     async function buscar() {
-        const url = `http://localhost:5010/listaNegra`;
+        const url = `http://localhost:5010/listaNegra?idUsuario=${usuario.id}`;
         let resp = await axios.get(url);
         setListaNegra(resp.data);
     }
@@ -23,16 +24,22 @@ export default function Consultar() {
     }
 
     async function sair() {
-        
+        localStorage.setItem('USUARIO', null)
+        navigate('/')
     }
     
     useEffect(() => {
-        
+        let usu = JSON.parse(localStorage.getItem('USUARIO'))
+        setUsuario(usu)
+
+        if (usu?.id == undefined) {
+            navigate('/')
+        }
     }, [])
 
     return (
         <div className='pagina-consultar'>
-            <h2>Bem-vindo</h2>
+            <h2>Bem-vindo {usuario?.nome}</h2>
             <button onClick={sair}>Sair</button>
             <h1> CONSULTAR </h1>
 
