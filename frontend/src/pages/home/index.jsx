@@ -21,7 +21,7 @@ export default function Home() {
         if (resp.data.erro != undefined) {
             alert(resp.data.erro)
         } else {
-            localStorage.setItem('USUARIO', JSON.stringify(resp.data))
+            localStorage.setItem('USUARIO', resp.data.token)
             navigate('/consultar')
         }
     }

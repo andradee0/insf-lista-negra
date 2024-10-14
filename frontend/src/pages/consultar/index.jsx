@@ -4,20 +4,24 @@ import './index.scss'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 
+
+
 export default function Consultar() {
-    const [usuario, setUsuario] = useState(null);
+    const [token, setToken] = useState(null);
     const [listaNegra, setListaNegra] = useState([]);
+
 
     const navigate = useNavigate()
 
+
     async function buscar() {
-        const url = `http://localhost:5010/listaNegra?idUsuario=${usuario.id}`;
+        const url = `http://localhost:5010/listaNegra?x-access-token=${token}`;
         let resp = await axios.get(url);
         setListaNegra(resp.data);
     }
 
     async function excluir(id) {
-        const url = `http://localhost:5010/listaNegra/${id}`;
+        const url = `http://localhost:5010/listaNegra/${id}?x-access-token=${token}`;
         await axios.delete(url)
 
         await buscar()
@@ -28,18 +32,21 @@ export default function Consultar() {
         navigate('/')
     }
     
-    useEffect(() => {
-        let usu = JSON.parse(localStorage.getItem('USUARIO'))
-        setUsuario(usu)
 
-        if (usu?.id == undefined) {
+    // funcao que executa assim que a pagina carrega
+    useEffect(() => {
+        let token = localStorage.getItem('USUARIO')
+        setToken(token)
+
+        if (token == 'null') {
             navigate('/')
         }
     }, [])
+    
 
     return (
         <div className='pagina-consultar'>
-            <h2>Bem-vindo {usuario?.nome}</h2>
+            <h2>Bem-vindo</h2>
             <button onClick={sair}>Sair</button>
             <h1> CONSULTAR </h1>
 
