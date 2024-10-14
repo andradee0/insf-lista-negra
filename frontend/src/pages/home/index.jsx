@@ -15,13 +15,13 @@ export default function Home() {
             "senha": senha
         }
 
-        const url = `http://localhost:5010/entrar/`
+        const url = `http://localhost:5050/entrar/`
         let resp = await axios.post(url, usuario)
 
         if (resp.data.erro != undefined) {
             alert(resp.data.erro)
         } else {
-            localStorage.setItem('USUARIO', JSON.stringify(resp.data))
+            localStorage.setItem('USUARIO', resp.data.token)
             navigate('/consultar')
         }
     }
@@ -44,7 +44,7 @@ export default function Home() {
                 <label htmlFor='senha'>Senha</label>
                 <input
                     id='senha'
-                    type='text'
+                    type='password'
                     value={senha}
                     onChange={(e) => setSenha(e.target.value)}
                 />

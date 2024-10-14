@@ -8,7 +8,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 
 
 export default function Cadastrar() {
-    const [usuario, setUsuario] = useState(null);
+    const [token, setToken] = useState(null);
 
     const [nome, setNome] = useState('');
     const [motivo, setMotivo] = useState('');
@@ -26,26 +26,26 @@ export default function Cadastrar() {
             "motivo": motivo,
             "vinganca": vinganca,
             "notaOdio": nota,
-            "perdoado": perdoado,
-            "idUsuario": usuario.id
+            "perdoado": perdoado
         }
         
         if (id == undefined) {
-            // CRIAR
-            const url = `http://localhost:5010/listaNegra/`;
+
+            const url = `http://localhost:5050/listaNegra?x-access-token=${token}`;
             let resp = await axios.post(url, paramCorpo);
             alert('Pessoa adicionada na lista negra. Id: ' + resp.data.novoId);
         } else {
-            // ALTERAR
-            const url = `http://localhost:5010/listaNegra/${id}`;
+            const url = `http://localhost:5050/listaNegra/${id}?x-access-token=${token}`;
             let resp = await axios.put(url, paramCorpo);
             alert('Pessoa alterada na lista negra.');
         }
+
+        navigate('/consultar')
     }
 
-    async function consultar() {
+    async function consultar(token) {
         if (id != undefined) {
-            const url = `http://localhost:5010/listaNegra/${id}`;
+            const url = `http://localhost:5050/listaNegra/${id}?x-access-token=${token}`;
             let resp = await axios.get(url);
             let dados = resp.data;
 
@@ -61,14 +61,14 @@ export default function Cadastrar() {
     }
 
     useEffect(() => {
-        let usu = JSON.parse(localStorage.getItem('USUARIO'))
-        setUsuario(usu)
+        let token = localStorage.getItem('USUARIO')
+        setToken(token)
 
-        if (usu.id == undefined) {
+        if (token == 'null') {
             navigate('/')
         }
 
-        consultar();
+        consultar(token);
     }, [])
 
     return (
@@ -80,23 +80,38 @@ export default function Cadastrar() {
             <div className='form'>
                 <div>
                     <label>Nome:</label>
-                    <input type='text' value={nome} onChange={e => setNome(e.target.value)} />
+                    <input
+                        type='text'
+                        value={nome}
+                        onChange={e => setNome(e.target.value)} />
                 </div>
                 <div>
                     <label>Motivo:</label>
-                    <input type='text' value={motivo} onChange={e => setMotivo(e.target.value)} />
+                    <input
+                        type='text'
+                        value={motivo}
+                        onChange={e => setMotivo(e.target.value)} />
                 </div>
                 <div>
                     <label>Vingança:</label>
-                    <input type='date' value={vinganca} onChange={e => setVinganca(e.target.value)} />
+                    <input
+                        type='date'
+                        value={vinganca}
+                        onChange={e => setVinganca(e.target.value)} />
                 </div>
                 <div>
                     <label>Nota de Ódio</label>
-                    <input type='text' value={nota} onChange={e => setNota(e.target.value)} />
+                    <input
+                        type='text'
+                        value={nota}
+                        onChange={e => setNota(e.target.value)} />
                 </div>
                 <div>
                     <label>Perdoado:</label>
-                    <input type='checkbox' checked={perdoado} onChange={e => setPerdoado(e.target.checked)} />
+                    <input
+                        type='checkbox'
+                        checked={perdoado}
+                        onChange={e => setPerdoado(e.target.checked)} />
                 </div>
             </div>
             <button onClick={salvar}> SALVAR </button>

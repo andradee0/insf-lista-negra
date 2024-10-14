@@ -1,23 +1,36 @@
 import { useEffect, useState } from 'react'
 import './index.scss'
+import toast, { Toaster } from 'react-hot-toast'
 
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 
+
+
 export default function Consultar() {
-    const [usuario, setUsuario] = useState(null);
+    const [token, setToken] = useState(null);
     const [listaNegra, setListaNegra] = useState([]);
+
 
     const navigate = useNavigate()
 
+
     async function buscar() {
-        const url = `http://localhost:5010/listaNegra?idUsuario=${usuario.id}`;
+        const url = `http://localhost:5050/listaNegra?x-access-token=${token}`;
         let resp = await axios.get(url);
         setListaNegra(resp.data);
+
+        if(resp.data.length > 0){
+            toast.success(`${resp.data.length} itens encontrados!`)
+        }else{
+            toast.error(`${resp.data.length} itens encontrados!`)
+        }
+
+        
     }
 
     async function excluir(id) {
-        const url = `http://localhost:5010/listaNegra/${id}`;
+        const url = `http://localhost:5050/listaNegra/${id}?x-access-token=${token}`;
         await axios.delete(url)
 
         await buscar()
@@ -27,19 +40,20 @@ export default function Consultar() {
         localStorage.setItem('USUARIO', null)
         navigate('/')
     }
-    
-    useEffect(() => {
-        let usu = JSON.parse(localStorage.getItem('USUARIO'))
-        setUsuario(usu)
 
-        if (usu?.id == undefined) {
+    useEffect(() => {
+        let token = localStorage.getItem('USUARIO')
+        setToken(token)
+
+        if (token == 'null') {
             navigate('/')
         }
     }, [])
+    
 
     return (
         <div className='pagina-consultar'>
-            <h2>Bem-vindo {usuario?.nome}</h2>
+            <h2>Bem-vindo {token?.nome}</h2>
             <button onClick={sair}>Sair</button>
             <h1> CONSULTAR </h1>
 
@@ -78,7 +92,7 @@ export default function Consultar() {
 
             </table>
 
-           
+                <Toaster />
         </div>
     )
 }

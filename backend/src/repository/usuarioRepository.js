@@ -1,4 +1,5 @@
 import con from "./connection.js";
+import crypto from 'crypto-js'
 
 export async function inserirUsuario(pessoa) {
     const comando = `
@@ -6,7 +7,9 @@ export async function inserirUsuario(pessoa) {
 					        values (?, ?)
     `;
     
-    let resposta = await con.query(comando, [pessoa.nome, pessoa.senha])
+    let hash = crypto.SHA256(pessoa.senha).toString()
+
+    let resposta = await con.query(comando, [pessoa.nome, hash ])
     let info = resposta[0];
     
     return info.insertId;
@@ -23,6 +26,7 @@ export async function validarUsuario(pessoa) {
             and ds_senha = ?
     `;
     
-    let registros = await con.query(comando, [pessoa.nome, pessoa.senha])
+    let hash = crypto.SHA256(pessoa.senha).toString()
+    let registros = await con.query(comando, [pessoa.nome, hash])
     return registros[0][0];
 }

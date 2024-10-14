@@ -1,13 +1,14 @@
-import * as db from '../repository/listaNegraRepository.js';
+import { autenticar } from '../utils/jwt.js';
 
+import * as db from '../repository/listaNegraRepository.js';
 
 import { Router } from "express";
 const endpoints = Router();
 
 
-endpoints.get('/listaNegra', async (req, resp) => {
+endpoints.get('/listaNegra', autenticar, async (req, resp) => {
     try {
-        let idUsuario = req.query.idUsuario;
+        let idUsuario = req.user.id;
         let registros = await db.consultarListaNegra(idUsuario);
         resp.send(registros);
     }
@@ -18,7 +19,7 @@ endpoints.get('/listaNegra', async (req, resp) => {
     }
 })
 
-endpoints.get('/listaNegra/:id', async (req, resp) => {
+endpoints.get('/listaNegra/:id', autenticar, async (req, resp) => {
     try {
         let id = req.params.id;
         let registros = await db.consultarListaNegraPorId(id);
@@ -31,9 +32,10 @@ endpoints.get('/listaNegra/:id', async (req, resp) => {
     }
 })
 
-endpoints.post('/listaNegra/', async (req, resp) => {
+endpoints.post('/listaNegra/', autenticar, async (req, resp) => {
     try {
         let pessoa = req.body;
+        pessoa.idUsuario = req.user.id;
 
         let id = await db.inserirListaNegra(pessoa);
 
@@ -49,7 +51,7 @@ endpoints.post('/listaNegra/', async (req, resp) => {
 })
 
 
-endpoints.put('/listaNegra/:id', async (req, resp) => {
+endpoints.put('/listaNegra/:id', autenticar, async (req, resp) => {
     try {
         let id = req.params.id;
         let pessoa = req.body;
@@ -70,7 +72,7 @@ endpoints.put('/listaNegra/:id', async (req, resp) => {
 })
 
 
-endpoints.delete('/listaNegra/:id', async (req, resp) => {
+endpoints.delete('/listaNegra/:id', autenticar, async (req, resp) => {
     try {
         let id = req.params.id;
 
